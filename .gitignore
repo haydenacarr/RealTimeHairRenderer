@@ -1,0 +1,24 @@
+# Ignore Visual Studio temporary files and build results
+.vs/
+x64/
+
+# Optional: Also ignore other common Visual Studio build artifacts
+*.user
+*.suo
+*.vcxproj.user
+*.obj
+*.pdb
+*.log
+*.tlog
+*.ipch
+*.aps
+*.ncb
+*.opendb
+*.opensdf
+*.sdf
+*.cache
+*.ilk
+
+# Ignore build output
+Debug/
+Release/
