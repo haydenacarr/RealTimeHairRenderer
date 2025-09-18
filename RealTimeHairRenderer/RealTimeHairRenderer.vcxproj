@@ -131,10 +131,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Engine\engine.cpp" />
+    <ClCompile Include="Source\Engine\Renderer\createDevice.cpp" />
+    <ClCompile Include="Source\Engine\Renderer\renderer.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\common.hpp" />
+    <ClInclude Include="Source\Engine\engine.hpp" />
+    <ClInclude Include="Source\Engine\Renderer\renderer.hpp" />
     <ClInclude Include="Source\window.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

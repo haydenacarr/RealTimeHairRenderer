@@ -1,23 +1,31 @@
-#include "window.hpp"
-#include <windows.h>
-#include <d3d12.h>
-#include <dxgi1_6.h>
+#include "common.hpp"
+#include "Engine/engine.hpp"
 #include <iostream>
-
+#include <d3d12sdklayers.h>
 
 int main(int argc, char* argv[]) {
-    SDL_Window* window = createSDLWindow();
-    HWND hwnd = getHWND(window);
-
-    bool running = true;
-    SDL_Event event;
-    while (running) {
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) running = false;
+    
+    Microsoft::WRL::ComPtr<ID3D12Debug> debugController;
+    if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))) {
+        debugController->EnableDebugLayer();
+        Microsoft::WRL::ComPtr<ID3D12Debug1> debugController1;
+        if (SUCCEEDED(debugController.As(&debugController1))) {
+            debugController1->SetEnableGPUBasedValidation(true);
         }
     }
 
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+    Engine engine;
+    if (!engine.init()) { 
+        std::cout << "Failed to Initialise Engine" << "\n";
+        return -1; 
+    }
+
+    engine.update();
+
+    if (!engine.cleanup()) { 
+        std::cout << "Failed to Cleanup Engine" << "\n";
+        return -1; 
+    }
+    
     return 0;
 }
