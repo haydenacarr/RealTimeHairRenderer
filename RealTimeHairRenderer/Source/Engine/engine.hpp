@@ -15,6 +15,9 @@ public:
 	bool cleanup();
 
 private:
-	Renderer renderer;
-	SDL_Window* window;
+	Renderer m_renderer;
+	SDL_Window* m_window;
+	HWND hwnd;
+	UINT m_width = 800;
+	UINT m_height = 600;
 };

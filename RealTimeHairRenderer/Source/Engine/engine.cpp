@@ -2,9 +2,12 @@
 #include "../window.hpp"
 
 bool Engine::init() {
-	this->window = createSDLWindow();
-	HWND hwnd = getHWND(this->window);
-    this->renderer.createDevice();
+	this->m_window = createSDLWindow(this->m_width, this->m_height);
+	this->hwnd = getHWND(this->m_window);
+    if (!this->m_renderer.createDevice()) return false;
+    if (!this->m_renderer.createFactory()) return false;
+    if (!this->m_renderer.createCommandQueue()) return false;
+    if (!this->m_renderer.createSwapChain(this->hwnd)) return false;
 	return true;
 }
 
@@ -19,7 +22,7 @@ void Engine::update() {
 }
 
 bool Engine::cleanup() {
-    SDL_DestroyWindow(this->window);
+    SDL_DestroyWindow(this->m_window);
     SDL_Quit();
     return true;
 }

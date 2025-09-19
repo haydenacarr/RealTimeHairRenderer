@@ -7,3 +7,4 @@
 #include <DirectXMath.h>
 #include <wrl/client.h>
 #include <iostream>
+#include <SDL.h>

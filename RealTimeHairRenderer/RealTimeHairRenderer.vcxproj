@@ -132,7 +132,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Engine\engine.cpp" />
+    <ClCompile Include="Source\Engine\Renderer\createCommandQueue.cpp" />
     <ClCompile Include="Source\Engine\Renderer\createDevice.cpp" />
+    <ClCompile Include="Source\Engine\Renderer\createFactory.cpp" />
+    <ClCompile Include="Source\Engine\Renderer\createSwapChain.cpp" />
     <ClCompile Include="Source\Engine\Renderer\renderer.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\window.cpp" />

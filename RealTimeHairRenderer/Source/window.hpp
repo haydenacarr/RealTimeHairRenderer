@@ -5,6 +5,6 @@
 #include <iostream>
 #include <SDL_syswm.h>
 
-SDL_Window* createSDLWindow();
+SDL_Window* createSDLWindow(UINT width, UINT height);
 
 HWND getHWND(SDL_Window* window);

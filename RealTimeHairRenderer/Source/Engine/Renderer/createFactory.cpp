@@ -2,7 +2,7 @@
 
 // A Factory is an interface for creating Swap Chains and enumerating GPU's
 bool Renderer::createFactory() {
-	if (FAILED(CreateDXGIFactory1(IID_PPV_ARGS(&m_Factory)))) {
+	if (FAILED(CreateDXGIFactory1(IID_PPV_ARGS(&m_factory)))) {
 		std::cerr << "Failed to Create Factory" << "\n";
 		return false;
 	}
