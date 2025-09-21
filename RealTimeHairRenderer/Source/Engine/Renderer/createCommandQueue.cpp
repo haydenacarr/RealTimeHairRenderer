@@ -8,7 +8,7 @@ bool Renderer::createCommandQueue() {
 	commandQueueDesc.NodeMask = 0;
 	commandQueueDesc.Priority = D3D12_COMMAND_QUEUE_PRIORITY_NORMAL;
 
-	if (FAILED(this->m_device->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(&this->m_commandQueue)))) {
+	if (FAILED(m_device->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(&m_commandQueue)))) {
 		std::cerr << "Failed to Command Queue" << "\n";
 		return false;
 	}

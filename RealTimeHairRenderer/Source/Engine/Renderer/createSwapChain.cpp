@@ -3,16 +3,16 @@
 // The Swap Chain are buffers used to present rendered frames to the display
 // When rendering is finished the Swap Chain swaps the front buffer for the back buffer
 // Rendering is finished when all pixels are drawn to prevent screen tearing
-bool Renderer::createSwapChain(HWND hwnd) {
+bool Renderer::createSwapChain(HWND hwnd, UINT width, UINT height) {
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
-	swapChainDesc.Width = 800; // FIX: hardcoded 
-	swapChainDesc.Height = 600; // FIX: hardcoded
+	swapChainDesc.Width = width;
+	swapChainDesc.Height = height; 
 	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	swapChainDesc.Stereo = FALSE;
 	swapChainDesc.SampleDesc.Count = 1;
 	swapChainDesc.SampleDesc.Quality = 0;
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; // Was reading docs and think you can change this somewhere else if needed
-	swapChainDesc.BufferCount = this->m_bufferCount; // Double buffering
+	swapChainDesc.BufferCount = m_bufferCount; // Double buffering
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 	swapChainDesc.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED;
 	swapChainDesc.Scaling = DXGI_SCALING_STRETCH;

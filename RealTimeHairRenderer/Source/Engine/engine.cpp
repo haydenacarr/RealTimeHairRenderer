@@ -2,12 +2,14 @@
 #include "../window.hpp"
 
 bool Engine::init() {
-	this->m_window = createSDLWindow(this->m_width, this->m_height);
-	this->hwnd = getHWND(this->m_window);
-    if (!this->m_renderer.createDevice()) return false;
-    if (!this->m_renderer.createFactory()) return false;
-    if (!this->m_renderer.createCommandQueue()) return false;
-    if (!this->m_renderer.createSwapChain(this->hwnd)) return false;
+	m_window = createSDLWindow(m_width, m_height);
+	m_hwnd = getHWND(m_window);
+    if (!m_renderer.createDevice()) return false;
+    if (!m_renderer.createFactory()) return false;
+    if (!m_renderer.createCommandQueue()) return false;
+    if (!m_renderer.createSwapChain(m_hwnd, m_width, m_height)) return false;
+    if (!m_renderer.createRenderTargets()) return false;
+    if (!m_renderer.createCommandList()) return false;
 	return true;
 }
 
@@ -22,7 +24,7 @@ void Engine::update() {
 }
 
 bool Engine::cleanup() {
-    SDL_DestroyWindow(this->m_window);
+    SDL_DestroyWindow(m_window);
     SDL_Quit();
     return true;
 }
