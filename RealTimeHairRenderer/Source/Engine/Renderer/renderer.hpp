@@ -14,6 +14,7 @@ public:
     bool createSwapChain(HWND hwnd, UINT width, UINT height);
     bool createRenderTargets();
     bool createCommandList();
+    bool createRootSignature();
 
 private:
     static constexpr uint32_t m_bufferCount = 2;
@@ -27,4 +28,5 @@ private:
     Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> m_rtvHeap = nullptr;
     Microsoft::WRL::ComPtr<ID3D12CommandAllocator> m_commandAllocators[m_bufferCount] = {};
     Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> m_commandList = nullptr;
+    Microsoft::WRL::ComPtr<ID3D12RootSignature> m_rootSignature = nullptr;
 };

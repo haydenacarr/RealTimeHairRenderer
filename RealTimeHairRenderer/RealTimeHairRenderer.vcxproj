@@ -137,6 +137,7 @@
     <ClCompile Include="Source\Engine\Renderer\createDevice.cpp" />
     <ClCompile Include="Source\Engine\Renderer\createFactory.cpp" />
     <ClCompile Include="Source\Engine\Renderer\createRenderTargets.cpp" />
+    <ClCompile Include="Source\Engine\Renderer\createRootSignature.cpp" />
     <ClCompile Include="Source\Engine\Renderer\createSwapChain.cpp" />
     <ClCompile Include="Source\Engine\Renderer\renderer.cpp" />
     <ClCompile Include="Source\main.cpp" />

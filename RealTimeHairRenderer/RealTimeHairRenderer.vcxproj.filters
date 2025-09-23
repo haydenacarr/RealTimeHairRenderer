@@ -45,6 +45,9 @@
     <ClCompile Include="Source\Engine\Renderer\createCommandList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Engine\Renderer\createRootSignature.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\window.hpp">

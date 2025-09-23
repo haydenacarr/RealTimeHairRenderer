@@ -10,6 +10,7 @@ bool Engine::init() {
     if (!m_renderer.createSwapChain(m_hwnd, m_width, m_height)) return false;
     if (!m_renderer.createRenderTargets()) return false;
     if (!m_renderer.createCommandList()) return false;
+    if (!m_renderer.createRootSignature()) return false;
 	return true;
 }
 
