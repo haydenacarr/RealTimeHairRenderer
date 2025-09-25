@@ -11,7 +11,7 @@ bool Engine::init() {
     if (!m_renderer.createRenderTargets()) return false;
     if (!m_renderer.createCommandList()) return false;
     if (!m_renderer.createRootSignature()) return false;
-    // if (!m_renderer.createPipelineStateObject()) return false; have to do shaders first
+    if (!m_renderer.createPipelineStateObject()) return false;
 	return true;
 }
 

@@ -41,6 +41,8 @@ private:
     Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> m_commandList = nullptr;
     Microsoft::WRL::ComPtr<ID3D12RootSignature> m_rootSignature = nullptr;
     Microsoft::WRL::ComPtr<ID3D12PipelineState> m_pipelineState = nullptr;
-    Microsoft::WRL::ComPtr<ID3DBlob> m_vsBytecode = nullptr;
-    Microsoft::WRL::ComPtr<ID3DBlob> m_psBytecode = nullptr; // Pixel Shader is Frag Shader in Vulkan
+    Microsoft::WRL::ComPtr<ID3DBlob> m_vertexShader = nullptr;
+    Microsoft::WRL::ComPtr<ID3DBlob> m_pixelShader = nullptr; // Pixel Shader is Frag Shader in Vulkan
+    Microsoft::WRL::ComPtr<ID3DBlob> m_signature = nullptr;
+    Microsoft::WRL::ComPtr<ID3DBlob> m_error = nullptr; // I tried making these blobs class members so I could release them thinkling they were the memory leak but guess not?
 };
