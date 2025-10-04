@@ -5,8 +5,8 @@
 bool Renderer::createPipelineStateObject() {
     D3DCompileFromFile(L"Source/Engine/Shaders/vertex.hlsl", nullptr, nullptr, "VSMain", "vs_5_0", D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0, &m_vertexShader, &m_error);
     D3DCompileFromFile(L"Source/Engine/Shaders/pixel.hlsl", nullptr, nullptr, "PSMain", "ps_5_0", D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0, &m_pixelShader, &m_error);
-    
-    D3D12_INPUT_ELEMENT_DESC inputElementDescs[] = {
+
+    D3D12_INPUT_ELEMENT_DESC inputLayout[] = {
         { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, offsetof(Triangle, position), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
         { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, offsetof(Triangle, color), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
     };
@@ -39,7 +39,7 @@ bool Renderer::createPipelineStateObject() {
     blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 
     D3D12_GRAPHICS_PIPELINE_STATE_DESC pipelineStateObjectDesc = {};
-    pipelineStateObjectDesc.InputLayout = { inputElementDescs, _countof(inputElementDescs) };
+    pipelineStateObjectDesc.InputLayout = { inputLayout, _countof(inputLayout) };
     pipelineStateObjectDesc.pRootSignature = m_rootSignature.Get();
     pipelineStateObjectDesc.VS = { m_vertexShader->GetBufferPointer(), m_vertexShader->GetBufferSize() };
     pipelineStateObjectDesc.PS = { m_pixelShader->GetBufferPointer(), m_pixelShader->GetBufferSize() };

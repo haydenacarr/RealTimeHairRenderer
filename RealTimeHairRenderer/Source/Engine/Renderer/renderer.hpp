@@ -21,10 +21,13 @@ public:
     bool createCommandList();
     bool createRootSignature();
     bool createPipelineStateObject();
+    bool createVertexBuffer();
+    void recordCommands(UINT width, UINT height);
 
 private:
     static constexpr uint32_t m_bufferCount = 2;
     uint32_t m_rtvDescriptorSize = 0;
+    uint32_t m_currentBackBufferIndex = 0;
     Triangle m_triangle[3] = { // This is the triangle from: https://github.com/microsoft/DirectX-Graphics-Samples/blob/master/Samples/Desktop/D3D12HelloWorld/src/HelloTriangle/D3D12HelloTriangle.cpp
     { {  0.0f,  0.25f, 0.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
     { {  0.25f, -0.25f, 0.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
@@ -45,4 +48,9 @@ private:
     Microsoft::WRL::ComPtr<ID3DBlob> m_pixelShader = nullptr; // Pixel Shader is Frag Shader in Vulkan
     Microsoft::WRL::ComPtr<ID3DBlob> m_signature = nullptr;
     Microsoft::WRL::ComPtr<ID3DBlob> m_error = nullptr; // I tried making these blobs class members so I could release them thinkling they were the memory leak but guess not?
+    Microsoft::WRL::ComPtr<ID3D12Resource> m_vertexBuffer = nullptr;
+
+    D3D12_VIEWPORT m_viewport;
+    D3D12_RECT m_scissorRect;
+    D3D12_VERTEX_BUFFER_VIEW m_vertexBufferView = {};
 };

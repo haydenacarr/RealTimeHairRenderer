@@ -140,6 +140,8 @@
     <ClCompile Include="Source\Engine\Renderer\createRenderTargets.cpp" />
     <ClCompile Include="Source\Engine\Renderer\createRootSignature.cpp" />
     <ClCompile Include="Source\Engine\Renderer\createSwapChain.cpp" />
+    <ClCompile Include="Source\Engine\Renderer\createVertexBuffer.cpp" />
+    <ClCompile Include="Source\Engine\Renderer\recordCommands.cpp" />
     <ClCompile Include="Source\Engine\Renderer\renderer.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\window.cpp" />
