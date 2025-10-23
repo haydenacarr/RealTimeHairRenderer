@@ -18,10 +18,17 @@ bool Renderer::createSwapChain(HWND hwnd, UINT width, UINT height) {
 	swapChainDesc.Scaling = DXGI_SCALING_STRETCH;
 	swapChainDesc.Flags = 0;
 
-	if (FAILED(m_factory->CreateSwapChainForHwnd(m_commandQueue.Get(), hwnd, &swapChainDesc, nullptr, nullptr, &m_swapChain))) {
+	IDXGISwapChain1* tempSwapChain = nullptr; // For making swapchain 3 instead of 1
+	if (SUCCEEDED(m_factory->CreateSwapChainForHwnd(m_commandQueue.Get(), hwnd, &swapChainDesc, nullptr, nullptr, &tempSwapChain))) {
+		if (SUCCEEDED(tempSwapChain->QueryInterface(IID_PPV_ARGS(&m_swapChain)))) {
+			tempSwapChain->Release();
+			return true;
+		}
+	}
+	/*if (FAILED(m_factory->CreateSwapChainForHwnd(m_commandQueue.Get(), hwnd, &swapChainDesc, nullptr, nullptr, &m_swapChain))) {
 		std::cerr << "Failed to Create Swap Chain" << "\n";
 		return false;
-	}
+	}*/
 
 	std::cout << "Swap Chain Created Successfully" << "\n";
 	return true;

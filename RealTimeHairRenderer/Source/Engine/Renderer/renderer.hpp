@@ -23,21 +23,26 @@ public:
     bool createPipelineStateObject();
     bool createVertexBuffer();
     void recordCommands(UINT width, UINT height);
+    bool createFence();
+    void drawImage();
 
 private:
     static constexpr uint32_t m_bufferCount = 2;
     uint32_t m_rtvDescriptorSize = 0;
     uint32_t m_currentBackBufferIndex = 0;
+    uint32_t m_fenceCounter = 0;
     Triangle m_triangle[3] = { // This is the triangle from: https://github.com/microsoft/DirectX-Graphics-Samples/blob/master/Samples/Desktop/D3D12HelloWorld/src/HelloTriangle/D3D12HelloTriangle.cpp
     { {  0.0f,  0.25f, 0.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
     { {  0.25f, -0.25f, 0.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
     { { -0.25f, -0.25f, 0.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } }
     };
+    UINT64 m_fenceValues[m_bufferCount] = {};
+    HANDLE m_fenceEvent = nullptr;
 
     Microsoft::WRL::ComPtr<IDXGIFactory5> m_factory = nullptr;
     Microsoft::WRL::ComPtr<ID3D12Device> m_device = nullptr;
     Microsoft::WRL::ComPtr<ID3D12CommandQueue> m_commandQueue = nullptr;
-    Microsoft::WRL::ComPtr<IDXGISwapChain1> m_swapChain = nullptr;
+    Microsoft::WRL::ComPtr<IDXGISwapChain3> m_swapChain = nullptr;
     Microsoft::WRL::ComPtr<ID3D12Resource> m_renderTargets[m_bufferCount] = {};
     Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> m_rtvHeap = nullptr;
     Microsoft::WRL::ComPtr<ID3D12CommandAllocator> m_commandAllocators[m_bufferCount] = {};
@@ -49,6 +54,7 @@ private:
     Microsoft::WRL::ComPtr<ID3DBlob> m_signature = nullptr;
     Microsoft::WRL::ComPtr<ID3DBlob> m_error = nullptr; // I tried making these blobs class members so I could release them thinkling they were the memory leak but guess not?
     Microsoft::WRL::ComPtr<ID3D12Resource> m_vertexBuffer = nullptr;
+    Microsoft::WRL::ComPtr<ID3D12Fence> m_fence = nullptr;
 
     D3D12_VIEWPORT m_viewport;
     D3D12_RECT m_scissorRect;

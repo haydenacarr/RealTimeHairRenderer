@@ -136,6 +136,7 @@
     <ClCompile Include="Source\Engine\Renderer\createCommandQueue.cpp" />
     <ClCompile Include="Source\Engine\Renderer\createDevice.cpp" />
     <ClCompile Include="Source\Engine\Renderer\createFactory.cpp" />
+    <ClCompile Include="Source\Engine\Renderer\createFence.cpp" />
     <ClCompile Include="Source\Engine\Renderer\createPipelineStateObject.cpp" />
     <ClCompile Include="Source\Engine\Renderer\createRenderTargets.cpp" />
     <ClCompile Include="Source\Engine\Renderer\createRootSignature.cpp" />
@@ -143,6 +144,7 @@
     <ClCompile Include="Source\Engine\Renderer\createVertexBuffer.cpp" />
     <ClCompile Include="Source\Engine\Renderer\recordCommands.cpp" />
     <ClCompile Include="Source\Engine\Renderer\renderer.cpp" />
+    <ClCompile Include="Source\Engine\Renderer\drawImage.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\window.cpp" />
   </ItemGroup>

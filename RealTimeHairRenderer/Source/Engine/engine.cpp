@@ -4,14 +4,16 @@
 bool Engine::init() {
 	m_window = createSDLWindow(m_width, m_height);
 	m_hwnd = getHWND(m_window);
-    if (!m_renderer.createDevice()) return false;
     if (!m_renderer.createFactory()) return false;
+    if (!m_renderer.createDevice()) return false;
+    if (!m_renderer.createVertexBuffer()) return false;
     if (!m_renderer.createCommandQueue()) return false;
     if (!m_renderer.createSwapChain(m_hwnd, m_width, m_height)) return false;
     if (!m_renderer.createRenderTargets()) return false;
     if (!m_renderer.createCommandList()) return false;
     if (!m_renderer.createRootSignature()) return false;
     if (!m_renderer.createPipelineStateObject()) return false;
+    if (!m_renderer.createFence()) return false;
 	return true;
 }
 
@@ -22,6 +24,9 @@ void Engine::update() {
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) running = false;
         }
+
+        m_renderer.recordCommands(m_width, m_height);
+        m_renderer.drawImage();
     }
 }
 
