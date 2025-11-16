@@ -15,7 +15,7 @@ void Renderer::recordCommands(UINT width, UINT height) {
 
     m_commandList->ResourceBarrier(1, &barrier1);
 
-    m_viewport = { 0.0f, 0.0f, (float)width, (float)height, 0.0f, 1.0f }; //Hardcoded fix
+    m_viewport = { 0.0f, 0.0f, (float)width, (float)height, 0.0f, 1.0f }; 
     m_scissorRect = { 0, 0, (LONG)width, (LONG)height };
 
     D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = m_rtvHeap->GetCPUDescriptorHandleForHeapStart();

@@ -23,25 +23,16 @@ bool Renderer::createVertexBuffer() {
     bufferDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
     bufferDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
 
-    HRESULT hr = m_device->CreateCommittedResource(
-        &heapProps,
-        D3D12_HEAP_FLAG_NONE,
-        &bufferDesc,
-        D3D12_RESOURCE_STATE_GENERIC_READ,
-        nullptr,
-        IID_PPV_ARGS(&m_vertexBuffer)
-    );
-    if (FAILED(hr)) {
+    if (FAILED(m_device->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &bufferDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&m_vertexBuffer)))){
         return false;
     }
 
+    // This copies the triangle data to the VB
     UINT8* pVertexDataBegin = nullptr;
     D3D12_RANGE readRange = {};
-    hr = m_vertexBuffer->Map(0, &readRange, reinterpret_cast<void**>(&pVertexDataBegin));
-    if (FAILED(hr)) {
+    if (FAILED(m_vertexBuffer->Map(0, &readRange, reinterpret_cast<void**>(&pVertexDataBegin)))){
         return false;
     }
-
     memcpy(pVertexDataBegin, m_triangle, vertexBufferSize);
     m_vertexBuffer->Unmap(0, nullptr);
 
@@ -49,5 +40,6 @@ bool Renderer::createVertexBuffer() {
     m_vertexBufferView.SizeInBytes = vertexBufferSize;
     m_vertexBufferView.StrideInBytes = sizeof(Triangle);
 
+    std::cout << "Vertex Buffer Created Successfully" << "\n";
     return true;
 }

@@ -22,7 +22,6 @@ bool Renderer::createSwapChain(HWND hwnd, UINT width, UINT height) {
 	if (SUCCEEDED(m_factory->CreateSwapChainForHwnd(m_commandQueue.Get(), hwnd, &swapChainDesc, nullptr, nullptr, &tempSwapChain))) {
 		if (SUCCEEDED(tempSwapChain->QueryInterface(IID_PPV_ARGS(&m_swapChain)))) {
 			tempSwapChain->Release();
-			return true;
 		}
 	}
 	/*if (FAILED(m_factory->CreateSwapChainForHwnd(m_commandQueue.Get(), hwnd, &swapChainDesc, nullptr, nullptr, &m_swapChain))) {

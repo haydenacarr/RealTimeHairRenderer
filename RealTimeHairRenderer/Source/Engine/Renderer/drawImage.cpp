@@ -1,6 +1,5 @@
 #include "renderer.hpp"
 
-// This function tells the CPU to wait for the GPU to finish executing all previously submitted commands.
 void Renderer::drawImage() {
     m_swapChain->Present(0, 0);
     const UINT64 fence = m_fenceCounter;

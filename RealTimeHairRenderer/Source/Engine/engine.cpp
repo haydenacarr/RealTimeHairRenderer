@@ -1,6 +1,7 @@
 #include "engine.hpp"
 #include "../window.hpp"
 
+// Initialises the renderer
 bool Engine::init() {
 	m_window = createSDLWindow(m_width, m_height);
 	m_hwnd = getHWND(m_window);
@@ -17,12 +18,28 @@ bool Engine::init() {
 	return true;
 }
 
+// Main render loop
 void Engine::update() {
     bool running = true;
     SDL_Event event;
     while (running) {
         while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) running = false;
+            // Checks if the window has been closed
+            if (event.type == SDL_QUIT) {
+                running = false;
+            }
+
+            // Checks if window has been resized
+            if (event.type == SDL_WINDOWEVENT_RESIZED) {
+                // TODO
+            }
+
+            // Checks for any keyboard inputs
+            if (event.type == SDL_KEYDOWN) {
+                if (event.key.keysym.sym == SDLK_ESCAPE) {
+                    running = false;
+                }
+            }
         }
 
         m_renderer.recordCommands(m_width, m_height);
@@ -30,8 +47,10 @@ void Engine::update() {
     }
 }
 
+// Cleans up any allocated resources
 bool Engine::cleanup() {
     SDL_DestroyWindow(m_window);
     SDL_Quit();
+
     return true;
 }

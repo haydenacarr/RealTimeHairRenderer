@@ -13,5 +13,6 @@ bool Renderer::createFence() {
 
     m_fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
 
+    std::cout << "Fence Created Successfully" << "\n";
     return true;
 }

@@ -16,8 +16,8 @@ public:
 
 private:
 	Renderer m_renderer;
-	SDL_Window* m_window;
-	HWND m_hwnd;
+	SDL_Window* m_window = nullptr;
+	HWND m_hwnd = nullptr;
 	UINT m_width = 800;
 	UINT m_height = 600;
 };

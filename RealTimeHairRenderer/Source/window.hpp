@@ -1,7 +1,6 @@
-#include <SDL.h>
-#include <windows.h>
 #pragma once
 #include <SDL.h>
+#include <windows.h>
 #include <iostream>
 #include <SDL_syswm.h>
 
