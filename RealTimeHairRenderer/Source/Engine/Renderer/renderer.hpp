@@ -50,6 +50,7 @@ public:
     void drawImage();
 
 private:
+    // D3D12 pipeline object necessary vars
     static constexpr uint32_t m_bufferCount = 2;
     uint32_t m_rtvDescriptorSize = 0;
     uint32_t m_currentBackBufferIndex = 0;
@@ -86,8 +87,7 @@ private:
         0, 4, 1,  1, 4, 5 // Bottom face
     };
 
-    Mvp mvp = {};
-
+    // D3D12 pipeline objects
     Microsoft::WRL::ComPtr<IDXGIFactory5> m_factory = nullptr;
     Microsoft::WRL::ComPtr<ID3D12Device> m_device = nullptr;
     Microsoft::WRL::ComPtr<ID3D12CommandQueue> m_commandQueue = nullptr;
@@ -109,8 +109,24 @@ private:
     Microsoft::WRL::ComPtr<ID3D12Resource> m_mvpBuffer = nullptr;
     Microsoft::WRL::ComPtr<ID3D12Fence> m_fence = nullptr; // Used to synchronise the GPU, ensures rendering is done in order
 
+    // Viewport and scissor
     D3D12_VIEWPORT m_viewport = {}; // Transforms normalised device coordinates to render target pixels
     D3D12_RECT m_scissorRect = {}; // Limits the drawing area by discarding unused pixels
+
+    // Buffer Objects
     D3D12_VERTEX_BUFFER_VIEW m_vertexBufferView = {}; // Holds the vertex data location
     D3D12_INDEX_BUFFER_VIEW m_indexBufferView = {}; // Holds the index data location
+
+    // Camera vars
+    Mvp m_mvp = {};
+    DirectX::XMVECTOR m_eyePos = {};
+    DirectX::XMVECTOR m_focusPoint = {};
+    DirectX::XMVECTOR m_upDir = {};
+    DirectX::XMMATRIX m_model = {};
+    DirectX::XMMATRIX m_view = {};
+    DirectX::XMMATRIX m_projection = {};
+    float m_fovAngleY = 0.0f;
+    float m_aspectRatio = 0.0f;
+    float m_nearZ = 0.0f;
+    float m_farZ = 0.0f;
 };

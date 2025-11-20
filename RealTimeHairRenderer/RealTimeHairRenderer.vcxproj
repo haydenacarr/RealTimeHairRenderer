@@ -132,6 +132,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Engine\engine.cpp" />
+    <ClCompile Include="Source\Engine\Renderer\cameraEdit.cpp" />
     <ClCompile Include="Source\Engine\Renderer\createCommandList.cpp" />
     <ClCompile Include="Source\Engine\Renderer\createCommandQueue.cpp" />
     <ClCompile Include="Source\Engine\Renderer\createConstantBuffer.cpp" />

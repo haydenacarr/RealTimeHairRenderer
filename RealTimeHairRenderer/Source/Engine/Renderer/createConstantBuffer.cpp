@@ -26,33 +26,33 @@ bool Renderer::createConstantBuffer(UINT width, UINT height) {
         return false;
     }
 
-    // Camera /*TODO seperate*/
-    DirectX::XMMATRIX model = DirectX::XMMatrixIdentity();
-    DirectX::XMVECTOR eyePos = DirectX::XMVectorSet(2.0f, 0.0f, -1.0f, 1.0f);
-    DirectX::XMVECTOR focusPoint = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
-    DirectX::XMVECTOR upDir = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-    DirectX::XMMATRIX view = DirectX::XMMatrixLookAtLH(eyePos, focusPoint, upDir);
+    // Camera setup
+    m_model = DirectX::XMMatrixIdentity();
+    m_eyePos = DirectX::XMVectorSet(2.0f, 0.0f, -1.0f, 1.0f);
+    m_focusPoint = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
+    m_upDir = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+    m_view = DirectX::XMMatrixLookAtLH(m_eyePos, m_focusPoint, m_upDir);
 
-    float fovAngleY = DirectX::XMConvertToRadians(90.0f);
-    float aspectRatio = static_cast<float>(width) / static_cast<float>(height);
+    m_fovAngleY = DirectX::XMConvertToRadians(90.0f);
+    m_aspectRatio = static_cast<float>(width) / static_cast<float>(height);
 
     // Clipping plane
-    float nearZ = 0.1f;
-    float farZ = 100.0f;
+    m_nearZ = 0.1f;
+    m_farZ = 100.0f;
 
-    DirectX::XMMATRIX projection = DirectX::XMMatrixPerspectiveFovLH(fovAngleY, aspectRatio, nearZ, farZ);
+    m_projection = DirectX::XMMatrixPerspectiveFovLH(m_fovAngleY, m_aspectRatio, m_nearZ, m_farZ);
 
     // Align the memory layout for HLSL
-    mvp.model = DirectX::XMMatrixTranspose(model);
-    mvp.view = DirectX::XMMatrixTranspose(view);
-    mvp.projection = DirectX::XMMatrixTranspose(projection);
+    m_mvp.model = DirectX::XMMatrixTranspose(m_model);
+    m_mvp.view = DirectX::XMMatrixTranspose(m_view);
+    m_mvp.projection = DirectX::XMMatrixTranspose(m_projection);
 
     UINT8* mappedData = nullptr;
     D3D12_RANGE readRange = {};
     if (FAILED(m_mvpBuffer->Map(0, &readRange, reinterpret_cast<void**>(&mappedData)))) {
         return false;
     }
-    memcpy(mappedData, &mvp, sizeof(Mvp));
+    memcpy(mappedData, &m_mvp, sizeof(Mvp));
     m_mvpBuffer->Unmap(0, nullptr);
 
     std::cout << "Constant Buffer Created Successfully" << "\n";
