@@ -1,7 +1,7 @@
 #include "renderer.hpp"
 
 bool Renderer::createVertexBuffer() {
-    const UINT vertexBufferSize = sizeof(m_triangle);
+    const UINT vertexBufferSize = sizeof(m_cube);
 
     D3D12_HEAP_PROPERTIES heapProps = {};
     heapProps.Type = D3D12_HEAP_TYPE_UPLOAD;
@@ -33,12 +33,13 @@ bool Renderer::createVertexBuffer() {
     if (FAILED(m_vertexBuffer->Map(0, &readRange, reinterpret_cast<void**>(&pVertexDataBegin)))){
         return false;
     }
-    memcpy(pVertexDataBegin, m_triangle, vertexBufferSize);
+    memcpy(pVertexDataBegin, m_cube, vertexBufferSize);
     m_vertexBuffer->Unmap(0, nullptr);
 
+    // Set the VBV data using the just created VB data
     m_vertexBufferView.BufferLocation = m_vertexBuffer->GetGPUVirtualAddress();
     m_vertexBufferView.SizeInBytes = vertexBufferSize;
-    m_vertexBufferView.StrideInBytes = sizeof(Triangle);
+    m_vertexBufferView.StrideInBytes = sizeof(Cube);
 
     std::cout << "Vertex Buffer Created Successfully" << "\n";
     return true;

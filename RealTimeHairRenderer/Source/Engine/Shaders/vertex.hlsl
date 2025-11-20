@@ -10,10 +10,26 @@ struct PSInput
     float4 color : COLOR;
 };
 
+cbuffer MvpCB : register(b0)
+{
+    matrix model;
+    matrix view;
+    matrix projection;
+};
+
+
 PSInput VSMain(VSInput input)
 {
     PSInput output;
-    output.pos = float4(input.pos, 1.0f);
+    
+    float4 pos = float4(input.pos, 1.0f);
+
+    pos = mul(pos, model);
+    pos = mul(pos, view);
+    pos = mul(pos, projection);
+    
+    output.pos = pos;
     output.color = input.color;
+    
     return output;
 }

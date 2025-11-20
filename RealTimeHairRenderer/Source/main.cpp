@@ -11,7 +11,13 @@ int main(int argc, char* argv[]) {
         Microsoft::WRL::ComPtr<ID3D12Debug1> debugController1;
         if (SUCCEEDED(debugController.As(&debugController1))) {
             debugController1->SetEnableGPUBasedValidation(true);
+        } else {
+            std::cout << "Failed to Enable GPU Based Validation" << "\n";
+            return -1;
         }
+    } else {
+        std::cout << "Failed to Enable Debug Layer" << "\n";
+        return -1;
     }
 
     Engine engine;

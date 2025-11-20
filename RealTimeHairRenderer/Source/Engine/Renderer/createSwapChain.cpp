@@ -22,12 +22,12 @@ bool Renderer::createSwapChain(HWND hwnd, UINT width, UINT height) {
 	if (SUCCEEDED(m_factory->CreateSwapChainForHwnd(m_commandQueue.Get(), hwnd, &swapChainDesc, nullptr, nullptr, &tempSwapChain))) {
 		if (SUCCEEDED(tempSwapChain->QueryInterface(IID_PPV_ARGS(&m_swapChain)))) {
 			tempSwapChain->Release();
+		} else {
+			std::cout << "Failed update to Swap Chain 3" << "\n";
 		}
+	} else {
+		std::cout << "Failed to create Swap Chain 1" << "\n";
 	}
-	/*if (FAILED(m_factory->CreateSwapChainForHwnd(m_commandQueue.Get(), hwnd, &swapChainDesc, nullptr, nullptr, &m_swapChain))) {
-		std::cerr << "Failed to Create Swap Chain" << "\n";
-		return false;
-	}*/
 
 	std::cout << "Swap Chain Created Successfully" << "\n";
 	return true;

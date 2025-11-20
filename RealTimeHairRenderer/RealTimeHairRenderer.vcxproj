@@ -134,9 +134,12 @@
     <ClCompile Include="Source\Engine\engine.cpp" />
     <ClCompile Include="Source\Engine\Renderer\createCommandList.cpp" />
     <ClCompile Include="Source\Engine\Renderer\createCommandQueue.cpp" />
+    <ClCompile Include="Source\Engine\Renderer\createConstantBuffer.cpp" />
+    <ClCompile Include="Source\Engine\Renderer\createDepthStencilBuffer.cpp" />
     <ClCompile Include="Source\Engine\Renderer\createDevice.cpp" />
     <ClCompile Include="Source\Engine\Renderer\createFactory.cpp" />
     <ClCompile Include="Source\Engine\Renderer\createFence.cpp" />
+    <ClCompile Include="Source\Engine\Renderer\createIndexBuffer.cpp" />
     <ClCompile Include="Source\Engine\Renderer\createPipelineStateObject.cpp" />
     <ClCompile Include="Source\Engine\Renderer\createRenderTargets.cpp" />
     <ClCompile Include="Source\Engine\Renderer\createRootSignature.cpp" />

@@ -8,6 +8,9 @@ bool Engine::init() {
     if (!m_renderer.createFactory()) return false;
     if (!m_renderer.createDevice()) return false;
     if (!m_renderer.createVertexBuffer()) return false;
+    if (!m_renderer.createIndexBuffer()) return false;
+    if (!m_renderer.createDepthStencilBuffer(m_width, m_height)) return false;
+    if (!m_renderer.createConstantBuffer(m_width, m_height)) return false;
     if (!m_renderer.createCommandQueue()) return false;
     if (!m_renderer.createSwapChain(m_hwnd, m_width, m_height)) return false;
     if (!m_renderer.createRenderTargets()) return false;
