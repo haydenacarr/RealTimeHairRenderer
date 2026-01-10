@@ -72,7 +72,7 @@
     <ClCompile Include="Source\Engine\Renderer\createConstantBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Engine\Renderer\cameraEdit.cpp">
+    <ClCompile Include="Source\Engine\Renderer\camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

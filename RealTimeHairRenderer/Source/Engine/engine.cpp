@@ -42,6 +42,12 @@ void Engine::update() {
                 if (event.key.keysym.sym == SDLK_ESCAPE) {
                     running = false;
                 }
+                if (event.key.keysym.sym == SDLK_q) {
+                    m_renderer.cameraRotate(0.0f, 1.0f, 0.0f);
+                }
+                if (event.key.keysym.sym == SDLK_e) {
+                    m_renderer.cameraRotate(0.0f, -1.0f, 0.0f);
+                }
             }
         }
 

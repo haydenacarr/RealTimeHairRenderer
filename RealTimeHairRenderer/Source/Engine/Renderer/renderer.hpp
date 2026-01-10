@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../common.hpp"
+#include <vector>
 
 #define DIM 3 // Triangle dimensions representing X,Y,Z
 #define COLOUR_CHANNELS 4 // Colour channel representing R,G,B,A
@@ -27,6 +28,12 @@ struct Mvp
     DirectX::XMMATRIX projection;
 };
 
+struct Rot {
+    float pitch;
+    float yaw;
+    float roll;
+};
+
 // My renderer class carries most objects needed for rendering learned my lesson from Vulkan lol
 class Renderer {
 public:
@@ -48,6 +55,8 @@ public:
     void recordCommands(UINT width, UINT height);
     bool createFence();
     void drawImage();
+
+    void cameraRotate(float x, float y, float z);
 
 private:
     // D3D12 pipeline object necessary vars
@@ -129,4 +138,5 @@ private:
     float m_aspectRatio = 0.0f;
     float m_nearZ = 0.0f;
     float m_farZ = 0.0f;
+    Rot m_cameraRot = { 0.0f, 0.0f, 0.0f };
 };

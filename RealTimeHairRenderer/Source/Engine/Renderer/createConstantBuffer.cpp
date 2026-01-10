@@ -1,6 +1,7 @@
 #include "renderer.hpp"
 
 // Stores uniform data that remains constant for many draw calls.
+// TODO REWRITE IT USING LESS MAGIC NUMBERS
 bool Renderer::createConstantBuffer(UINT width, UINT height) {
     D3D12_HEAP_PROPERTIES heapProps = {};
     heapProps.Type = D3D12_HEAP_TYPE_UPLOAD;
@@ -28,12 +29,12 @@ bool Renderer::createConstantBuffer(UINT width, UINT height) {
 
     // Camera setup
     m_model = DirectX::XMMatrixIdentity();
-    m_eyePos = DirectX::XMVectorSet(2.0f, 0.0f, -1.0f, 1.0f);
+    m_eyePos = DirectX::XMVectorSet(2.0f, 1.0f, 2.0f, 1.0f); // Show in presentation
     m_focusPoint = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
     m_upDir = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
     m_view = DirectX::XMMatrixLookAtLH(m_eyePos, m_focusPoint, m_upDir);
 
-    m_fovAngleY = DirectX::XMConvertToRadians(90.0f);
+    m_fovAngleY = DirectX::XMConvertToRadians(60.0f);
     m_aspectRatio = static_cast<float>(width) / static_cast<float>(height);
 
     // Clipping plane
