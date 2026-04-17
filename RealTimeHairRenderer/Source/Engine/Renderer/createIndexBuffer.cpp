@@ -3,6 +3,8 @@
 // Stores the indices of an objects vertices allowing the pipeline to reuse vertices 
 // reducing memory usage and improving  performance
 bool Renderer::createIndexBuffer() {
+    const UINT indexBufferSize = static_cast<UINT>(hair.indices.size() * sizeof(uint32_t));
+
     D3D12_HEAP_PROPERTIES heapProps = {};
     heapProps.Type = D3D12_HEAP_TYPE_UPLOAD;
     heapProps.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
@@ -13,7 +15,7 @@ bool Renderer::createIndexBuffer() {
     D3D12_RESOURCE_DESC bufferDesc = {};
     bufferDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
     bufferDesc.Alignment = 0;
-    bufferDesc.Width = sizeof(m_cubeIndices);
+    bufferDesc.Width = indexBufferSize;
     bufferDesc.Height = 1;
     bufferDesc.DepthOrArraySize = 1;
     bufferDesc.MipLevels = 1;
@@ -34,13 +36,13 @@ bool Renderer::createIndexBuffer() {
     if (FAILED(m_indexBuffer->Map(0, &readRange, reinterpret_cast<void**>(&pIndexDataBegin)))) {
         return false;
     }
-    memcpy(pIndexDataBegin, m_cubeIndices, CUBE_INDICES * sizeof(uint16_t));
+    memcpy(pIndexDataBegin, hair.indices.data(), indexBufferSize);
     m_indexBuffer->Unmap(0, nullptr);
 
     // Describe the index buffer view
     m_indexBufferView.BufferLocation = m_indexBuffer->GetGPUVirtualAddress();
-    m_indexBufferView.SizeInBytes = CUBE_INDICES * sizeof(uint16_t);
-    m_indexBufferView.Format = DXGI_FORMAT_R16_UINT; 
+    m_indexBufferView.SizeInBytes = indexBufferSize;
+    m_indexBufferView.Format = DXGI_FORMAT_R32_UINT; 
 
     std::cout << "Index Buffer Created Successfully" << "\n";
 

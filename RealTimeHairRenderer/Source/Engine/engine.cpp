@@ -5,6 +5,8 @@
 bool Engine::init() {
 	m_window = createSDLWindow(m_width, m_height);
 	m_hwnd = getHWND(m_window);
+    m_renderer.hair = LoadHairFile("C:/Dev/RealTimeHairRenderer/RealTimeHairRenderer/wCurly.hair");
+
     if (!m_renderer.createFactory()) return false;
     if (!m_renderer.createDevice()) return false;
     if (!m_renderer.createVertexBuffer()) return false;
@@ -18,6 +20,7 @@ bool Engine::init() {
     if (!m_renderer.createRootSignature()) return false;
     if (!m_renderer.createPipelineStateObject()) return false;
     if (!m_renderer.createFence()) return false;
+
 	return true;
 }
 
@@ -52,6 +55,7 @@ void Engine::update() {
         }
 
         m_renderer.recordCommands(m_width, m_height);
+
         m_renderer.drawImage();
     }
 }

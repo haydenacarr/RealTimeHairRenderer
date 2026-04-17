@@ -1,7 +1,7 @@
 #include "renderer.hpp"
 
 bool Renderer::createVertexBuffer() {
-    const UINT vertexBufferSize = sizeof(m_cube);
+    const UINT vertexBufferSize = static_cast<UINT>(hair.vertices.size() * sizeof(HairVertex));
 
     D3D12_HEAP_PROPERTIES heapProps = {};
     heapProps.Type = D3D12_HEAP_TYPE_UPLOAD;
@@ -33,13 +33,13 @@ bool Renderer::createVertexBuffer() {
     if (FAILED(m_vertexBuffer->Map(0, &readRange, reinterpret_cast<void**>(&pVertexDataBegin)))){
         return false;
     }
-    memcpy(pVertexDataBegin, m_cube, vertexBufferSize);
+    memcpy(pVertexDataBegin, hair.vertices.data(), vertexBufferSize);
     m_vertexBuffer->Unmap(0, nullptr);
 
     // Set the VBV data using the just created VB data
     m_vertexBufferView.BufferLocation = m_vertexBuffer->GetGPUVirtualAddress();
     m_vertexBufferView.SizeInBytes = vertexBufferSize;
-    m_vertexBufferView.StrideInBytes = sizeof(Cube);
+    m_vertexBufferView.StrideInBytes = sizeof(HairVertex);
 
     std::cout << "Vertex Buffer Created Successfully" << "\n";
     return true;

@@ -29,7 +29,7 @@ bool Renderer::createConstantBuffer(UINT width, UINT height) {
 
     // Camera setup
     m_model = DirectX::XMMatrixIdentity();
-    m_eyePos = DirectX::XMVectorSet(2.0f, 1.0f, 2.0f, 1.0f); // Show in presentation
+    m_eyePos = DirectX::XMVectorSet(0.0f, 0.0f, 120.0f, 1.0f); // Show in presentation
     m_focusPoint = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
     m_upDir = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
     m_view = DirectX::XMMatrixLookAtLH(m_eyePos, m_focusPoint, m_upDir);

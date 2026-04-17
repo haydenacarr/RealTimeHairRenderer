@@ -6,10 +6,10 @@ bool Renderer::createPipelineStateObject() {
     D3DCompileFromFile(L"Source/Engine/Shaders/vertex.hlsl", nullptr, nullptr, "VSMain", "vs_5_0", D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0, &m_vertexShader, &m_error);
     D3DCompileFromFile(L"Source/Engine/Shaders/pixel.hlsl", nullptr, nullptr, "PSMain", "ps_5_0", D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0, &m_pixelShader, &m_error);
 
-    // Specify the input layout of the object being rendered
+    // Specify the input layout of the HairVertex struct
     D3D12_INPUT_ELEMENT_DESC inputLayout[] = {
-        { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, offsetof(Cube, position), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-        { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, offsetof(Cube, color), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
+        { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, offsetof(HairVertex, position), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+        { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, offsetof(HairVertex, color), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
     };
 
     // Multiple structs specifying the PSO data
@@ -55,7 +55,7 @@ bool Renderer::createPipelineStateObject() {
     pipelineStateObjectDesc.BlendState = blendDesc;
     pipelineStateObjectDesc.DepthStencilState = depthDesc;
     pipelineStateObjectDesc.SampleMask = UINT_MAX;
-    pipelineStateObjectDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+    pipelineStateObjectDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE;
     pipelineStateObjectDesc.NumRenderTargets = 1;
     pipelineStateObjectDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
     pipelineStateObjectDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;

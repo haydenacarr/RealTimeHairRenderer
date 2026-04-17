@@ -2,6 +2,7 @@
 
 #include "../../common.hpp"
 #include <vector>
+#include <fstream>
 
 #define DIM 3 // Triangle dimensions representing X,Y,Z
 #define COLOUR_CHANNELS 4 // Colour channel representing R,G,B,A
@@ -34,6 +35,85 @@ struct Rot {
     float roll;
 };
 
+struct HairVertex {
+    DirectX::XMFLOAT3 position;
+    DirectX::XMFLOAT4 color;
+};
+
+struct HairData {
+    std::vector<HairVertex> vertices;
+    std::vector<uint32_t> indices;
+    DirectX::XMFLOAT3 tangent;
+};
+
+inline HairData LoadHairFile(const std::string& filename) {
+    // Since the file is binary have to set ifstream setitng
+    std::ifstream file(filename, std::ios::binary);
+    if (!file.is_open()) {
+        std::cerr << "Failed to open hair file" << std::endl;
+        return {};
+    }
+
+    // According ti data layout in file here: https://www.cemyuksel.com/research/hairmodels/
+    struct Header {
+        char pad[4];
+        uint32_t numStrands;
+        uint32_t numPoints;
+        uint32_t flags;
+        uint32_t defaultSegments;
+        float defaultThickness;
+        float defaultTransparency;
+        float defaultColour[3];
+        char info[88];
+    } header;
+
+    file.read(reinterpret_cast<char*>(&header), sizeof(Header));
+    std::vector<unsigned short> segments(header.numStrands, (unsigned short)header.defaultSegments);
+    if (header.flags & 0x1) {
+        file.read(reinterpret_cast<char*>(segments.data()), header.numStrands * sizeof(unsigned short));
+    }
+
+    std::vector<DirectX::XMFLOAT3> positions(header.numPoints);
+    if (header.flags & 0x2) {
+        file.read(reinterpret_cast<char*>(positions.data()), header.numPoints * sizeof(DirectX::XMFLOAT3));
+    }
+
+    // Colour
+    std::vector<DirectX::XMFLOAT3> colours(header.numPoints, { header.defaultColour[0], header.defaultColour[1], header.defaultColour[2] });
+    if (header.flags & 0x10) {
+        if (header.flags & 0x4) file.seekg(header.numPoints * sizeof(float), std::ios::cur);
+        if (header.flags & 0x8) file.seekg(header.numPoints * sizeof(float), std::ios::cur);
+        file.read(reinterpret_cast<char*>(colours.data()), header.numPoints * sizeof(DirectX::XMFLOAT3));
+    }
+
+    // Build Vertex & Index Buffers
+    HairData data;
+    for (uint32_t i = 0; i < header.numPoints; ++i) {
+        HairVertex v;
+        v.position = positions[i];
+
+        v.color.x = colours[i].x;
+        v.color.y = colours[i].y;
+        v.color.z = colours[i].z;
+        v.color.w = 1.0f;
+
+        data.vertices.push_back(v);
+    }
+
+    // Connect points for each strand
+    uint32_t pointOffset = 0;
+    for (uint32_t s = 0; s < header.numStrands; s++) {
+        uint32_t numSegments = segments[s];
+        for (uint32_t seg = 0; seg < numSegments; seg++) {
+            data.indices.push_back(pointOffset + seg);     
+            data.indices.push_back(pointOffset + seg + 1);
+        }
+        pointOffset += (numSegments + 1);
+    }
+
+    return data;
+}
+
 // My renderer class carries most objects needed for rendering learned my lesson from Vulkan lol
 class Renderer {
 public:
@@ -57,6 +137,8 @@ public:
     void drawImage();
 
     void cameraRotate(float x, float y, float z);
+
+    HairData hair;
 
 private:
     // D3D12 pipeline object necessary vars

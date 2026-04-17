@@ -32,10 +32,10 @@ void Renderer::recordCommands(UINT width, UINT height) {
     m_commandList->SetPipelineState(m_pipelineState.Get());
     m_commandList->SetGraphicsRootSignature(m_rootSignature.Get());
     m_commandList->SetGraphicsRootConstantBufferView(0, m_mvpBuffer->GetGPUVirtualAddress());
-    m_commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    m_commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
     m_commandList->IASetVertexBuffers(0, 1, &m_vertexBufferView);
     m_commandList->IASetIndexBuffer(&m_indexBufferView);
-    m_commandList->DrawIndexedInstanced(CUBE_INDICES, 1, 0, 0, 0);
+    m_commandList->DrawIndexedInstanced(static_cast<UINT>(hair.vertices.size()), 1, 0, 0, 0);
 
     // Transition back from render target to PRESENT after rendering
     D3D12_RESOURCE_BARRIER barrier2 = {};
