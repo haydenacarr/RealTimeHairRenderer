@@ -39,7 +39,7 @@ bool Renderer::createConstantBuffer(UINT width, UINT height) {
 
     // Clipping plane
     m_nearZ = 0.1f;
-    m_farZ = 100.0f;
+    m_farZ = 1000.0f;
 
     m_projection = DirectX::XMMatrixPerspectiveFovLH(m_fovAngleY, m_aspectRatio, m_nearZ, m_farZ);
 
@@ -47,6 +47,9 @@ bool Renderer::createConstantBuffer(UINT width, UINT height) {
     m_mvp.model = DirectX::XMMatrixTranspose(m_model);
     m_mvp.view = DirectX::XMMatrixTranspose(m_view);
     m_mvp.projection = DirectX::XMMatrixTranspose(m_projection);
+    m_mvp.lightDir = { 0.500f, 0.500f, -0.500f, 0.0f };
+    DirectX::XMStoreFloat4(&m_mvp.cameraPos, m_eyePos); // hacky way fix later
+
 
     UINT8* mappedData = nullptr;
     D3D12_RANGE readRange = {};

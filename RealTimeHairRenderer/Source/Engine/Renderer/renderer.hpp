@@ -22,11 +22,12 @@ struct Cube {
 };
 
 // Struct to represent the camera in a 3D space
-struct Mvp
-{
+struct Mvp {
     DirectX::XMMATRIX model;
     DirectX::XMMATRIX view;
     DirectX::XMMATRIX projection;
+    DirectX::XMFLOAT4 lightDir;
+    DirectX::XMFLOAT4 cameraPos;
 };
 
 struct Rot {
@@ -37,7 +38,8 @@ struct Rot {
 
 struct HairVertex {
     DirectX::XMFLOAT3 position;
-    DirectX::XMFLOAT4 color;
+    DirectX::XMFLOAT4 colour;
+    DirectX::XMFLOAT3 tangent;
 };
 
 struct HairData {
@@ -88,25 +90,40 @@ inline HairData LoadHairFile(const std::string& filename) {
 
     // Build Vertex & Index Buffers
     HairData data;
-    for (uint32_t i = 0; i < header.numPoints; ++i) {
+    for (uint32_t i = 0; i < header.numPoints; i++) {
         HairVertex v;
         v.position = positions[i];
-
-        v.color.x = colours[i].x;
-        v.color.y = colours[i].y;
-        v.color.z = colours[i].z;
-        v.color.w = 1.0f;
-
+        v.colour.x = colours[i].x;
+        v.colour.y = colours[i].y;
+        v.colour.z = colours[i].z;
+        v.colour.w = 1.0f;
+        v.tangent = { 0.0f, 0.0f, 0.0f };
         data.vertices.push_back(v);
     }
 
-    // Connect points for each strand
     uint32_t pointOffset = 0;
     for (uint32_t s = 0; s < header.numStrands; s++) {
         uint32_t numSegments = segments[s];
+
         for (uint32_t seg = 0; seg < numSegments; seg++) {
-            data.indices.push_back(pointOffset + seg);     
-            data.indices.push_back(pointOffset + seg + 1);
+            uint32_t segStart = pointOffset + seg;
+            uint32_t segEnd = pointOffset + seg + 1;
+
+            // Calculate Tangent
+            DirectX::XMVECTOR a = DirectX::XMLoadFloat3(&data.vertices[segStart].position);
+            DirectX::XMVECTOR b = DirectX::XMLoadFloat3(&data.vertices[segEnd].position);
+            DirectX::XMVECTOR T = DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(a, b));
+
+            // Store the tangent in the vertex
+            DirectX::XMStoreFloat3(&data.vertices[segStart].tangent, T);
+
+            // If the file finishes it still makes a line by using previous segment
+            if (seg == numSegments - 1) {
+                DirectX::XMStoreFloat3(&data.vertices[segEnd].tangent, T);
+            }
+
+            data.indices.push_back(segStart);
+            data.indices.push_back(segEnd);
         }
         pointOffset += (numSegments + 1);
     }
