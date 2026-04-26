@@ -4,7 +4,7 @@
 // Its main job is to tell the GPU where to find the shader data efficiently
 bool Renderer::createRootSignature() {
 	// Define b0 in vertex shader
-	D3D12_ROOT_PARAMETER rootParameters[1] = {};
+	D3D12_ROOT_PARAMETER rootParameters[2] = {};
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 	rootParameters[0].Descriptor.ShaderRegister = 0; 

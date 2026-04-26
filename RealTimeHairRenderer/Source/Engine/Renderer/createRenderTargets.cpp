@@ -5,7 +5,7 @@
 // The Back Buffer is the final Render Target drawn to the screen
 bool Renderer::createRenderTargets() {
 	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
-	rtvHeapDesc.NumDescriptors = m_bufferCount;
+	rtvHeapDesc.NumDescriptors = m_bufferCount + 1;
 	rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 	rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 	rtvHeapDesc.NodeMask = 0;

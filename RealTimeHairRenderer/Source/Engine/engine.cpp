@@ -12,6 +12,7 @@ bool Engine::init() {
     if (!m_renderer.createDevice()) return false;
     if (!m_renderer.createRootSignature()) return false;
     if (!m_renderer.createPipelineStateObject()) return false;
+    //if (!m_renderer.createComputePSO()) return false;
     if (!m_renderer.createVertexBuffer()) return false;
     if (!m_renderer.createIndexBuffer()) return false;
     if (!m_renderer.createDepthStencilBuffer(m_width, m_height)) return false;
@@ -19,6 +20,7 @@ bool Engine::init() {
     if (!m_renderer.createCommandQueue()) return false;
     if (!m_renderer.createSwapChain(m_hwnd, m_width, m_height)) return false;
     if (!m_renderer.createRenderTargets()) return false;
+    if (!m_renderer.createMSAA(m_width, m_height)) return false;
     if (!m_renderer.createCommandList()) return false;
     if (!m_renderer.createFence()) return false;
 
@@ -41,16 +43,21 @@ void Engine::update() {
                 // TODO
             }
 
-            // Checks for any keyboard inputs
+            const float moveSpeed = 5.0f;     
+            const float rotateSpeed = 2.0f;   
             if (event.type == SDL_KEYDOWN) {
-                if (event.key.keysym.sym == SDLK_ESCAPE) {
-                    running = false;
-                }
-                if (event.key.keysym.sym == SDLK_q) {
-                    m_renderer.cameraRotate(0.0f, 1.0f, 0.0f);
-                }
-                if (event.key.keysym.sym == SDLK_e) {
-                    m_renderer.cameraRotate(0.0f, -1.0f, 0.0f);
+                switch (event.key.keysym.sym) {
+                case SDLK_ESCAPE: running = false; break;
+                case SDLK_w: m_renderer.cameraMove(moveSpeed, 0.0f, 0.0f); 
+                case SDLK_s: m_renderer.cameraMove(-moveSpeed, 0.0f, 0.0f);
+                case SDLK_a: m_renderer.cameraMove(0.0f, moveSpeed, 0.0f); 
+                case SDLK_d: m_renderer.cameraMove(0.0f, -moveSpeed, 0.0f);
+                case SDLK_SPACE: m_renderer.cameraMove(0.0f, 0.0f, moveSpeed); 
+                case SDLK_LCTRL: m_renderer.cameraMove(0.0f, 0.0f, -moveSpeed);
+                case SDLK_UP: m_renderer.cameraRotate(-rotateSpeed, 0.0f, 0.0f);
+                case SDLK_DOWN: m_renderer.cameraRotate(rotateSpeed, 0.0f, 0.0f); 
+                case SDLK_LEFT: m_renderer.cameraRotate(0.0f, -rotateSpeed, 0.0f);
+                case SDLK_RIGHT: m_renderer.cameraRotate(0.0f, rotateSpeed, 0.0f);
                 }
             }
         }

@@ -23,7 +23,7 @@ float4 PSMain(PSInput input) : SV_TARGET
     float diffuse = max(0.0, dot(N, L));
    
     float3 ambient = 0.15f;
-    float3 headColor = float3(0.7, 0.6, 0.55);
+    float3 headColor = float3(0.909, 0.745, 0.675);
     float3 finalColor = headColor * (diffuse + ambient);
     
     return float4(finalColor, 1.0f);

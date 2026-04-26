@@ -62,7 +62,7 @@ bool Renderer::createPipelineStateObject() {
     pipelineStateObjectDesc.NumRenderTargets = 1;
     pipelineStateObjectDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
     pipelineStateObjectDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
-    pipelineStateObjectDesc.SampleDesc.Count = 1;
+    pipelineStateObjectDesc.SampleDesc.Count = 4;
 
     if (FAILED(m_device->CreateGraphicsPipelineState(&pipelineStateObjectDesc, IID_PPV_ARGS(&m_pipelineState)))) {
         std::cerr << "Failed to Create Hair Pipeline State Object" << "\n";

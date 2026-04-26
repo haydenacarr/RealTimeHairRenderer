@@ -18,6 +18,17 @@ struct Rot {
     float roll;
 };
 
+struct Move {
+    float x;
+    float y;
+    float z;
+};
+
+struct Camera {
+    DirectX::XMFLOAT3 position = { 0.0f, 0.0f, -150.0f };
+    DirectX::XMFLOAT3 rotation = { 0.0f, 0.0f, 0.0f }; // pitch, yaw, roll
+};
+
 struct HairVertex {
     DirectX::XMFLOAT3 position;
     DirectX::XMFLOAT4 colour;
@@ -50,15 +61,18 @@ public:
     bool createCommandList();
     bool createRootSignature();
     bool createPipelineStateObject();
+    bool createComputePSO();
     bool createVertexBuffer();
     bool createIndexBuffer();
     bool createDepthStencilBuffer(UINT width, UINT height);
     bool createConstantBuffer(UINT width, UINT height);
+    bool createMSAA(UINT width, UINT height);
     void recordCommands(UINT width, UINT height);
     bool createFence();
     void drawImage();
 
     void cameraRotate(float x, float y, float z);
+    void cameraMove(float x, float y, float z);
     std::vector<HeadVertex> loadHead(std::string path);
     HairData loadHair(const std::string& filename);
 
@@ -91,6 +105,7 @@ private:
     Microsoft::WRL::ComPtr<ID3DBlob> m_headVertexShader = nullptr;
     Microsoft::WRL::ComPtr<ID3DBlob> m_headPixelShader = nullptr; // Pixel Shader is Frag Shader in Vulkan
     Microsoft::WRL::ComPtr<ID3DBlob> m_signature = nullptr;
+    Microsoft::WRL::ComPtr<ID3DBlob> m_computeShaderBlob = nullptr;
     Microsoft::WRL::ComPtr<ID3DBlob> m_error = nullptr; // I tried making these blobs class members so I could release them thinkling they were the memory leak but guess not?
     Microsoft::WRL::ComPtr<ID3D12Resource> m_vertexBuffer = nullptr;
     Microsoft::WRL::ComPtr<ID3D12Resource> m_headVertexBuffer = nullptr;
@@ -98,6 +113,9 @@ private:
     Microsoft::WRL::ComPtr<ID3D12Resource> m_depthStencil = nullptr;
     Microsoft::WRL::ComPtr<ID3D12Resource> m_mvpBuffer = nullptr;
     Microsoft::WRL::ComPtr<ID3D12Fence> m_fence = nullptr; // Used to synchronise the GPU, ensures rendering is done in order
+    Microsoft::WRL::ComPtr<ID3D12Resource> m_msaaRenderTarget;
+    Microsoft::WRL::ComPtr<ID3D12PipelineState> m_computePSO;
+    D3D12_CPU_DESCRIPTOR_HANDLE m_msaaRtvHandle;
 
     // Viewport and scissor
     D3D12_VIEWPORT m_viewport = {}; // Transforms normalised device coordinates to render target pixels
@@ -121,4 +139,5 @@ private:
     float m_nearZ = 0.0f;
     float m_farZ = 0.0f;
     Rot m_cameraRot = { 0.0f, 0.0f, 0.0f };
+    Move m_cameraMove = { 0.0f, 0.0f, -150.0f };
 };

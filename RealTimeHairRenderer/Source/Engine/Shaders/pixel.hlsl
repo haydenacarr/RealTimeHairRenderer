@@ -19,8 +19,8 @@ cbuffer MvpCB : register(b0)
 float4 PSMain(PSInput input) : SV_TARGET
 {
     float Kd = 0.7; 
-    float Ks1 = 0.5;
-    float Ks2 = 0.4; 
+    float Ks1 = 0.3;
+    float Ks2 = 0.2; 
     float p1 = 80.0; 
     float p2 = 25.0; 
     float3 random = frac(sin(input.primID * 12.9898) * 43758.5453);

@@ -25,7 +25,7 @@ bool Renderer::createDepthStencilBuffer(UINT width, UINT height) {
     depthDesc.DepthOrArraySize = 1;
     depthDesc.MipLevels = 1;
     depthDesc.Format = DXGI_FORMAT_D32_FLOAT;
-    depthDesc.SampleDesc.Count = 1;
+    depthDesc.SampleDesc.Count = 4;
     depthDesc.SampleDesc.Quality = 0;
     depthDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
     depthDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
