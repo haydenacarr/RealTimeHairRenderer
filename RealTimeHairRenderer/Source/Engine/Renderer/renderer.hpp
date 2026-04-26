@@ -1,25 +1,7 @@
 #pragma once
-
 #include "../../common.hpp"
 #include <vector>
 #include <fstream>
-
-#define DIM 3 // Triangle dimensions representing X,Y,Z
-#define COLOUR_CHANNELS 4 // Colour channel representing R,G,B,A
-#define CUBE_VERTICES 8
-#define CUBE_INDICES 36
-
-// Struct to represent the triangle presented to the screen
-struct Triangle {
-    float position[DIM];
-    float color[COLOUR_CHANNELS];
-};
-
-// Struct to represent the triangle presented to the screen
-struct Cube {
-    float position[DIM];
-    float color[COLOUR_CHANNELS];
-};
 
 // Struct to represent the camera in a 3D space
 struct Mvp {
@@ -42,94 +24,17 @@ struct HairVertex {
     DirectX::XMFLOAT3 tangent;
 };
 
+struct HeadVertex {
+    DirectX::XMFLOAT3 position;
+    DirectX::XMFLOAT3 normal;
+    DirectX::XMFLOAT2 uv;
+};
+
 struct HairData {
     std::vector<HairVertex> vertices;
     std::vector<uint32_t> indices;
     DirectX::XMFLOAT3 tangent;
 };
-
-inline HairData LoadHairFile(const std::string& filename) {
-    // Since the file is binary have to set ifstream setitng
-    std::ifstream file(filename, std::ios::binary);
-    if (!file.is_open()) {
-        std::cerr << "Failed to open hair file" << std::endl;
-        return {};
-    }
-
-    // According ti data layout in file here: https://www.cemyuksel.com/research/hairmodels/
-    struct Header {
-        char pad[4];
-        uint32_t numStrands;
-        uint32_t numPoints;
-        uint32_t flags;
-        uint32_t defaultSegments;
-        float defaultThickness;
-        float defaultTransparency;
-        float defaultColour[3];
-        char info[88];
-    } header;
-
-    file.read(reinterpret_cast<char*>(&header), sizeof(Header));
-    std::vector<unsigned short> segments(header.numStrands, (unsigned short)header.defaultSegments);
-    if (header.flags & 0x1) {
-        file.read(reinterpret_cast<char*>(segments.data()), header.numStrands * sizeof(unsigned short));
-    }
-
-    std::vector<DirectX::XMFLOAT3> positions(header.numPoints);
-    if (header.flags & 0x2) {
-        file.read(reinterpret_cast<char*>(positions.data()), header.numPoints * sizeof(DirectX::XMFLOAT3));
-    }
-
-    // Colour
-    std::vector<DirectX::XMFLOAT3> colours(header.numPoints, { header.defaultColour[0], header.defaultColour[1], header.defaultColour[2] });
-    if (header.flags & 0x10) {
-        if (header.flags & 0x4) file.seekg(header.numPoints * sizeof(float), std::ios::cur);
-        if (header.flags & 0x8) file.seekg(header.numPoints * sizeof(float), std::ios::cur);
-        file.read(reinterpret_cast<char*>(colours.data()), header.numPoints * sizeof(DirectX::XMFLOAT3));
-    }
-
-    // Build Vertex & Index Buffers
-    HairData data;
-    for (uint32_t i = 0; i < header.numPoints; i++) {
-        HairVertex v;
-        v.position = positions[i];
-        v.colour.x = colours[i].x;
-        v.colour.y = colours[i].y;
-        v.colour.z = colours[i].z;
-        v.colour.w = 1.0f;
-        v.tangent = { 0.0f, 0.0f, 0.0f };
-        data.vertices.push_back(v);
-    }
-
-    uint32_t pointOffset = 0;
-    for (uint32_t s = 0; s < header.numStrands; s++) {
-        uint32_t numSegments = segments[s];
-
-        for (uint32_t seg = 0; seg < numSegments; seg++) {
-            uint32_t segStart = pointOffset + seg;
-            uint32_t segEnd = pointOffset + seg + 1;
-
-            // Calculate Tangent
-            DirectX::XMVECTOR a = DirectX::XMLoadFloat3(&data.vertices[segStart].position);
-            DirectX::XMVECTOR b = DirectX::XMLoadFloat3(&data.vertices[segEnd].position);
-            DirectX::XMVECTOR T = DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(a, b));
-
-            // Store the tangent in the vertex
-            DirectX::XMStoreFloat3(&data.vertices[segStart].tangent, T);
-
-            // If the file finishes it still makes a line by using previous segment
-            if (seg == numSegments - 1) {
-                DirectX::XMStoreFloat3(&data.vertices[segEnd].tangent, T);
-            }
-
-            data.indices.push_back(segStart);
-            data.indices.push_back(segEnd);
-        }
-        pointOffset += (numSegments + 1);
-    }
-
-    return data;
-}
 
 // My renderer class carries most objects needed for rendering learned my lesson from Vulkan lol
 class Renderer {
@@ -154,9 +59,11 @@ public:
     void drawImage();
 
     void cameraRotate(float x, float y, float z);
+    std::vector<HeadVertex> loadHead(std::string path);
+    HairData loadHair(const std::string& filename);
 
     HairData hair;
-
+    std::vector<HeadVertex> headVertices;
 private:
     // D3D12 pipeline object necessary vars
     static constexpr uint32_t m_bufferCount = 2;
@@ -165,35 +72,6 @@ private:
     uint32_t m_fenceCounter = 0;
     UINT64 m_fenceValues[m_bufferCount] = {};
     HANDLE m_fenceEvent = nullptr;
-
-    /*
-    Triangle m_triangle[DIM] = { // This is the triangle from: https://github.com/microsoft/DirectX-Graphics-Samples/blob/master/Samples/Desktop/D3D12HelloWorld/src/HelloTriangle/D3D12HelloTriangle.cpp
-    { {  0.0f,  0.25f, 0.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
-    { {  0.25f, -0.25f, 0.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
-    { { -0.25f, -0.25f, 0.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } }
-    }; */
-
-    Cube m_cube[CUBE_VERTICES] =
-    {
-        { { -0.5f, -0.5f, -0.5f }, { 0.0f, 0.0f, 0.0f, 1.0f } },
-        { { -0.5f, -0.5f,  0.5f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
-        { { -0.5f,  0.5f, -0.5f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
-        { { -0.5f,  0.5f,  0.5f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
-        { { 0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
-        { { 0.5f, -0.5f,  0.5f }, { 1.0f, 0.0f, 1.0f, 1.0f } },
-        { { 0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f, 0.0f, 1.0f } },
-        { { 0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f, 1.0f, 1.0f } },
-    };
-
-    uint16_t m_cubeIndices[CUBE_INDICES] =
-    {
-        0, 2, 4,  2, 6, 4, // Front face
-        1, 5, 3,  3, 5, 7, // Back face
-        0, 1, 2,  2, 1, 3, // Left face
-        4, 6, 5,  6, 7, 5, // Right face
-        2, 3, 6,  6, 3, 7, // Top face
-        0, 4, 1,  1, 4, 5 // Bottom face
-    };
 
     // D3D12 pipeline objects
     Microsoft::WRL::ComPtr<IDXGIFactory5> m_factory = nullptr;
@@ -209,9 +87,13 @@ private:
     Microsoft::WRL::ComPtr<ID3D12PipelineState> m_pipelineState = nullptr;
     Microsoft::WRL::ComPtr<ID3DBlob> m_vertexShader = nullptr;
     Microsoft::WRL::ComPtr<ID3DBlob> m_pixelShader = nullptr; // Pixel Shader is Frag Shader in Vulkan
+    Microsoft::WRL::ComPtr<ID3D12PipelineState> m_headPipelineState = nullptr;
+    Microsoft::WRL::ComPtr<ID3DBlob> m_headVertexShader = nullptr;
+    Microsoft::WRL::ComPtr<ID3DBlob> m_headPixelShader = nullptr; // Pixel Shader is Frag Shader in Vulkan
     Microsoft::WRL::ComPtr<ID3DBlob> m_signature = nullptr;
     Microsoft::WRL::ComPtr<ID3DBlob> m_error = nullptr; // I tried making these blobs class members so I could release them thinkling they were the memory leak but guess not?
     Microsoft::WRL::ComPtr<ID3D12Resource> m_vertexBuffer = nullptr;
+    Microsoft::WRL::ComPtr<ID3D12Resource> m_headVertexBuffer = nullptr;
     Microsoft::WRL::ComPtr<ID3D12Resource> m_indexBuffer = nullptr;
     Microsoft::WRL::ComPtr<ID3D12Resource> m_depthStencil = nullptr;
     Microsoft::WRL::ComPtr<ID3D12Resource> m_mvpBuffer = nullptr;
@@ -223,6 +105,7 @@ private:
 
     // Buffer Objects
     D3D12_VERTEX_BUFFER_VIEW m_vertexBufferView = {}; // Holds the vertex data location
+    D3D12_VERTEX_BUFFER_VIEW m_headVertexBufferView = {}; // Holds the vertex data location
     D3D12_INDEX_BUFFER_VIEW m_indexBufferView = {}; // Holds the index data location
 
     // Camera vars

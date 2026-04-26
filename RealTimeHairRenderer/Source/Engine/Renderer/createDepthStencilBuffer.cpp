@@ -42,7 +42,7 @@ bool Renderer::createDepthStencilBuffer(UINT width, UINT height) {
     // Create the Depth Stencil View
     D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
     dsvDesc.Format = DXGI_FORMAT_D32_FLOAT;
-    dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
+    dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2DMS;
     dsvDesc.Flags = D3D12_DSV_FLAG_NONE;
 
     m_device->CreateDepthStencilView(m_depthStencil.Get(), &dsvDesc, m_dsvHeap->GetCPUDescriptorHandleForHeapStart());

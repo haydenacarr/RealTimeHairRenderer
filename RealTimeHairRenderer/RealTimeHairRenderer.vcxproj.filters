@@ -75,6 +75,12 @@
     <ClCompile Include="Source\Engine\Renderer\camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Engine\Renderer\loadHead.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Renderer\loadHair.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\window.hpp">
@@ -89,9 +95,14 @@
     <ClInclude Include="Source\Engine\Renderer\renderer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Include\tiny_obj_loader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Source\Engine\Shaders\vertex.hlsl" />
     <FxCompile Include="Source\Engine\Shaders\pixel.hlsl" />
+    <FxCompile Include="Source\Engine\Shaders\headps.hlsl" />
+    <FxCompile Include="Source\Engine\Shaders\headvs.hlsl" />
   </ItemGroup>
 </Project>

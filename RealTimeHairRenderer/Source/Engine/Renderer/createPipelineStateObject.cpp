@@ -5,6 +5,8 @@
 bool Renderer::createPipelineStateObject() {
     D3DCompileFromFile(L"Source/Engine/Shaders/vertex.hlsl", nullptr, nullptr, "VSMain", "vs_5_0", D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0, &m_vertexShader, &m_error);
     D3DCompileFromFile(L"Source/Engine/Shaders/pixel.hlsl", nullptr, nullptr, "PSMain", "ps_5_0", D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0, &m_pixelShader, &m_error);
+    D3DCompileFromFile(L"Source/Engine/Shaders/headvs.hlsl", nullptr, nullptr, "VSMain", "vs_5_0", D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0, &m_headVertexShader, &m_error);
+    D3DCompileFromFile(L"Source/Engine/Shaders/headps.hlsl", nullptr, nullptr, "PSMain", "ps_5_0", D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0, &m_headPixelShader, &m_error);
 
     // Specify the input layout of the HairVertex struct
     D3D12_INPUT_ELEMENT_DESC inputLayout[] = {
@@ -28,7 +30,7 @@ bool Renderer::createPipelineStateObject() {
     rasterizerDesc.ConservativeRaster = D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF;
 
     D3D12_BLEND_DESC blendDesc = {};
-    blendDesc.AlphaToCoverageEnable = FALSE;
+    blendDesc.AlphaToCoverageEnable = TRUE;
     blendDesc.IndependentBlendEnable = FALSE;
     blendDesc.RenderTarget[0].BlendEnable = FALSE;
     blendDesc.RenderTarget[0].LogicOpEnable = FALSE;
@@ -63,7 +65,24 @@ bool Renderer::createPipelineStateObject() {
     pipelineStateObjectDesc.SampleDesc.Count = 1;
 
     if (FAILED(m_device->CreateGraphicsPipelineState(&pipelineStateObjectDesc, IID_PPV_ARGS(&m_pipelineState)))) {
-        std::cerr << "Failed to Create Pipeline State Object" << "\n";
+        std::cerr << "Failed to Create Hair Pipeline State Object" << "\n";
+        return false;
+    }
+
+    D3D12_INPUT_ELEMENT_DESC headLayout[] = {
+        { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, offsetof(HeadVertex, position), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+        { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, offsetof(HeadVertex, normal), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 }
+    };
+
+    D3D12_GRAPHICS_PIPELINE_STATE_DESC headPsoDesc = pipelineStateObjectDesc;
+    headPsoDesc.InputLayout = { headLayout, _countof(headLayout) };
+    headPsoDesc.VS = { m_headVertexShader->GetBufferPointer(), m_headVertexShader->GetBufferSize() };
+    headPsoDesc.PS = { m_headPixelShader->GetBufferPointer(), m_headPixelShader->GetBufferSize() };
+    headPsoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+    headPsoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+
+    if (FAILED(m_device->CreateGraphicsPipelineState(&headPsoDesc, IID_PPV_ARGS(&m_headPipelineState)))) {
+        std::cerr << "Failed to Create Head Pipeline State Object" << "\n";
         return false;
     }
 

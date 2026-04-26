@@ -5,10 +5,13 @@
 bool Engine::init() {
 	m_window = createSDLWindow(m_width, m_height);
 	m_hwnd = getHWND(m_window);
-    m_renderer.hair = LoadHairFile("C:/Dev/RealTimeHairRenderer/RealTimeHairRenderer/wCurly.hair");
+    m_renderer.hair = m_renderer.loadHair("C:/Dev/RealTimeHairRenderer/RealTimeHairRenderer/wCurly.hair");
+    m_renderer.headVertices = m_renderer.loadHead("C:/Dev/RealTimeHairRenderer/RealTimeHairRenderer/head/woman.obj");
 
     if (!m_renderer.createFactory()) return false;
     if (!m_renderer.createDevice()) return false;
+    if (!m_renderer.createRootSignature()) return false;
+    if (!m_renderer.createPipelineStateObject()) return false;
     if (!m_renderer.createVertexBuffer()) return false;
     if (!m_renderer.createIndexBuffer()) return false;
     if (!m_renderer.createDepthStencilBuffer(m_width, m_height)) return false;
@@ -17,8 +20,6 @@ bool Engine::init() {
     if (!m_renderer.createSwapChain(m_hwnd, m_width, m_height)) return false;
     if (!m_renderer.createRenderTargets()) return false;
     if (!m_renderer.createCommandList()) return false;
-    if (!m_renderer.createRootSignature()) return false;
-    if (!m_renderer.createPipelineStateObject()) return false;
     if (!m_renderer.createFence()) return false;
 
 	return true;

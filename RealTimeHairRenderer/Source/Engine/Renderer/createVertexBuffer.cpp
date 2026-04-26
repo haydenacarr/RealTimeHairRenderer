@@ -41,6 +41,26 @@ bool Renderer::createVertexBuffer() {
     m_vertexBufferView.SizeInBytes = vertexBufferSize;
     m_vertexBufferView.StrideInBytes = sizeof(HairVertex);
 
+    // Head
+    const UINT headBufferSize = static_cast<UINT>(headVertices.size() * sizeof(HeadVertex));
+
+    D3D12_RESOURCE_DESC headBufferDesc = bufferDesc; // Reuse the desc
+    headBufferDesc.Width = headBufferSize;
+
+    if (FAILED(m_device->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &headBufferDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&m_headVertexBuffer)))) {
+        return false;
+    }
+
+    // Copy Head Data
+    UINT8* pHeadDataBegin = nullptr;
+    m_headVertexBuffer->Map(0, nullptr, reinterpret_cast<void**>(&pHeadDataBegin));
+    memcpy(pHeadDataBegin, headVertices.data(), headBufferSize);
+    m_headVertexBuffer->Unmap(0, nullptr);
+
+    m_headVertexBufferView.BufferLocation = m_headVertexBuffer->GetGPUVirtualAddress();
+    m_headVertexBufferView.SizeInBytes = headBufferSize;
+    m_headVertexBufferView.StrideInBytes = sizeof(HeadVertex);
+
     std::cout << "Vertex Buffer Created Successfully" << "\n";
     return true;
 }

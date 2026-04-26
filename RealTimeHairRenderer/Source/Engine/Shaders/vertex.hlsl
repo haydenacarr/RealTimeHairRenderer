@@ -22,17 +22,15 @@ cbuffer MvpCB : register(b0)
     float4 cameraPos;
 };
 
-
 PSInput VSMain(VSInput input)
 {
     PSInput output;
     
     float4 worldPosition = mul(float4(input.pos, 1.0f), model);
-    output.worldPos = worldPosition.xyz;
-
     float4 viewPos = mul(worldPosition, view);
-    output.pos = mul(viewPos, projection);
     
+    output.worldPos = worldPosition.xyz;
+    output.pos = mul(viewPos, projection);
     output.color = input.color;
     output.tangent = normalize(mul(input.tangent, (float3x3) model));
     

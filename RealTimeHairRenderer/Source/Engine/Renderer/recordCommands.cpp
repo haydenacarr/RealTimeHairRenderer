@@ -29,13 +29,17 @@ void Renderer::recordCommands(UINT width, UINT height) {
     m_commandList->ClearDepthStencilView(m_dsvHeap->GetCPUDescriptorHandleForHeapStart(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
     m_commandList->RSSetViewports(1, &m_viewport);
     m_commandList->RSSetScissorRects(1, &m_scissorRect);
-    m_commandList->SetPipelineState(m_pipelineState.Get());
     m_commandList->SetGraphicsRootSignature(m_rootSignature.Get());
     m_commandList->SetGraphicsRootConstantBufferView(0, m_mvpBuffer->GetGPUVirtualAddress());
+    m_commandList->SetPipelineState(m_headPipelineState.Get());
+    m_commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    m_commandList->IASetVertexBuffers(0, 1, &m_headVertexBufferView);
+    m_commandList->DrawInstanced(static_cast<UINT>(headVertices.size()), 1, 0, 0);
+    m_commandList->SetPipelineState(m_pipelineState.Get());
     m_commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
     m_commandList->IASetVertexBuffers(0, 1, &m_vertexBufferView);
     m_commandList->IASetIndexBuffer(&m_indexBufferView);
-    m_commandList->DrawIndexedInstanced(static_cast<UINT>(hair.vertices.size()), 1, 0, 0, 0);
+    m_commandList->DrawIndexedInstanced(static_cast<UINT>(hair.indices.size()), 1, 0, 0, 0);
 
     // Transition back from render target to PRESENT after rendering
     D3D12_RESOURCE_BARRIER barrier2 = {};
