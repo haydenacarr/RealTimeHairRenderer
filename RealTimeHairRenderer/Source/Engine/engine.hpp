@@ -18,6 +18,6 @@ private:
 	Renderer m_renderer;
 	SDL_Window* m_window = nullptr;
 	HWND m_hwnd = nullptr;
-	UINT m_width = 1920;
-	UINT m_height = 1080;
+	UINT m_width = 3840;
+	UINT m_height = 2160;
 };
