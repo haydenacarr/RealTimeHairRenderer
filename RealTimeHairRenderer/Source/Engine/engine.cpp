@@ -12,7 +12,6 @@ bool Engine::init() {
     if (!m_renderer.createDevice()) return false;
     if (!m_renderer.createRootSignature()) return false;
     if (!m_renderer.createPipelineStateObject()) return false;
-    //if (!m_renderer.createComputePSO()) return false;
     if (!m_renderer.createVertexBuffer()) return false;
     if (!m_renderer.createIndexBuffer()) return false;
     if (!m_renderer.createDepthStencilBuffer(m_width, m_height)) return false;
