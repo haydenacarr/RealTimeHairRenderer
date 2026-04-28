@@ -48,16 +48,16 @@ void Engine::update() {
             if (event.type == SDL_KEYDOWN) {
                 switch (event.key.keysym.sym) {
                 case SDLK_ESCAPE: running = false; break;
-                case SDLK_w: m_renderer.cameraMove(moveSpeed, 0.0f, 0.0f); 
-                case SDLK_s: m_renderer.cameraMove(-moveSpeed, 0.0f, 0.0f);
-                case SDLK_a: m_renderer.cameraMove(0.0f, moveSpeed, 0.0f); 
-                case SDLK_d: m_renderer.cameraMove(0.0f, -moveSpeed, 0.0f);
-                case SDLK_SPACE: m_renderer.cameraMove(0.0f, 0.0f, moveSpeed); 
-                case SDLK_LCTRL: m_renderer.cameraMove(0.0f, 0.0f, -moveSpeed);
-                case SDLK_UP: m_renderer.cameraRotate(-rotateSpeed, 0.0f, 0.0f);
-                case SDLK_DOWN: m_renderer.cameraRotate(rotateSpeed, 0.0f, 0.0f); 
-                case SDLK_LEFT: m_renderer.cameraRotate(0.0f, -rotateSpeed, 0.0f);
-                case SDLK_RIGHT: m_renderer.cameraRotate(0.0f, rotateSpeed, 0.0f);
+                case SDLK_w: m_renderer.cameraMove(moveSpeed, 0.0f, 0.0f); break;
+                case SDLK_s: m_renderer.cameraMove(-moveSpeed, 0.0f, 0.0f); break;
+                case SDLK_a: m_renderer.cameraMove(0.0f, moveSpeed, 0.0f); break;
+                case SDLK_d: m_renderer.cameraMove(0.0f, -moveSpeed, 0.0f); break;
+                case SDLK_SPACE: m_renderer.cameraMove(0.0f, 0.0f, moveSpeed); break;
+                case SDLK_LCTRL: m_renderer.cameraMove(0.0f, 0.0f, -moveSpeed);break;
+                case SDLK_UP: m_renderer.cameraRotate(rotateSpeed, 0.0f, 0.0f); break;
+                case SDLK_DOWN: m_renderer.cameraRotate(-rotateSpeed, 0.0f, 0.0f); break;
+                case SDLK_LEFT: m_renderer.cameraRotate(0.0f, rotateSpeed, 0.0f); break;
+                case SDLK_RIGHT: m_renderer.cameraRotate(0.0f, -rotateSpeed, 0.0f); break;
                 }
             }
         }

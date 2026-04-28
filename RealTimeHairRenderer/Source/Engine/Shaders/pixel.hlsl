@@ -23,6 +23,8 @@ float4 PSMain(PSInput input) : SV_TARGET
     float Ks2 = 0.2; 
     float p1 = 80.0; 
     float p2 = 25.0; 
+    float3 sigmaA = (0.8, 0.5, 0.3);
+    
     float3 random = frac(sin(input.primID * 12.9898) * 43758.5453);
     float3 variation = 0.8 + (random * 0.3);
     float3 colour = input.color.rgb * variation;
@@ -37,7 +39,8 @@ float4 PSMain(PSInput input) : SV_TARGET
     float diffuse = Kd * sinTL;
     
     // Marschner 
-    float3 N = normalize(input.worldPos);
+    float3 up = float3(0, 1, 0);
+    float3 N = normalize(cross(T, up));
     float3 T1 = normalize(T + N * 0.1);
     float3 T2 = normalize(T - N * 0.15); 
     
@@ -54,6 +57,9 @@ float4 PSMain(PSInput input) : SV_TARGET
     float cosTE2 = dot(T2, E);
     float sinTE2 = sqrt(max(0.0, 1.0 - cosTE2 * cosTE2));
     float3 specSecondary = Ks2 * pow(max(0.0, cosTL2 * cosTE2 + sinTL2 * sinTE2), p2);
+    float pathLength = 1.0 + 0.5 * (1.0 - dot(T, E));
+    float3 absorption = exp(-sigmaA * pathLength);
+    specSecondary = specSecondary * absorption;
     specSecondary = specSecondary * random;
     
     // Shadows were too harsh so ambient light was added
