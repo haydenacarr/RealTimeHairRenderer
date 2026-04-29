@@ -55,8 +55,8 @@ void Engine::update() {
                 case SDLK_LCTRL: m_renderer.cameraMove(0.0f, 0.0f, -moveSpeed);break;
                 case SDLK_UP: m_renderer.cameraRotate(rotateSpeed, 0.0f, 0.0f); break;
                 case SDLK_DOWN: m_renderer.cameraRotate(-rotateSpeed, 0.0f, 0.0f); break;
-                case SDLK_LEFT: m_renderer.cameraRotate(0.0f, rotateSpeed, 0.0f); break;
-                case SDLK_RIGHT: m_renderer.cameraRotate(0.0f, -rotateSpeed, 0.0f); break;
+                case SDLK_LEFT: m_renderer.cameraRotate(0.0f, -rotateSpeed, 0.0f); break;
+                case SDLK_RIGHT: m_renderer.cameraRotate(0.0f, rotateSpeed, 0.0f); break;
                 }
             }
         }
