@@ -5,8 +5,8 @@
 bool Engine::init() {
 	m_window = createSDLWindow(m_width, m_height);
 	m_hwnd = getHWND(m_window);
-    m_renderer.hair = m_renderer.loadHair("C:/Dev/RealTimeHairRenderer/RealTimeHairRenderer/wCurly.hair");
-    m_renderer.headVertices = m_renderer.loadHead("C:/Dev/RealTimeHairRenderer/RealTimeHairRenderer/head/woman.obj");
+    m_renderer.hair = m_renderer.loadHair("wCurly.hair");
+    m_renderer.headVertices = m_renderer.loadHead("head/woman.obj");
 
     if (!m_renderer.createFactory()) return false;
     if (!m_renderer.createDevice()) return false;
